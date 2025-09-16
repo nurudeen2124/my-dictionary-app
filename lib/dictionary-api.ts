@@ -1,6 +1,6 @@
 import type { SearchResult } from "@/types/dictionary"
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_PYTHON_API_URL || "http://localhost:8000/api"
+const API_BASE_URL = "/api"
 
 export async function searchWord(word: string): Promise<SearchResult> {
   if (!word.trim()) {
@@ -8,6 +8,7 @@ export async function searchWord(word: string): Promise<SearchResult> {
   }
 
   try {
+    console.log("[v0] Searching for word:", word)
     const response = await fetch(`${API_BASE_URL}/search?word=${encodeURIComponent(word.trim())}`)
 
     if (!response.ok) {
@@ -15,6 +16,7 @@ export async function searchWord(word: string): Promise<SearchResult> {
     }
 
     const result: SearchResult = await response.json()
+    console.log("[v0] Search result:", result)
     return result
   } catch (error) {
     console.error("Dictionary API error:", error)
@@ -32,6 +34,7 @@ export async function getWordSuggestions(partial: string): Promise<string[]> {
   }
 
   try {
+    console.log("[v0] Getting suggestions for:", partial)
     const response = await fetch(`${API_BASE_URL}/suggestions?partial=${encodeURIComponent(partial.trim())}`)
 
     if (!response.ok) {
@@ -39,6 +42,7 @@ export async function getWordSuggestions(partial: string): Promise<string[]> {
     }
 
     const result = await response.json()
+    console.log("[v0] Suggestions result:", result.suggestions)
     return result.suggestions || []
   } catch (error) {
     console.error("Suggestions API error:", error)
