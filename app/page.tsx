@@ -3,10 +3,11 @@
 import { useState } from "react"
 import { SearchBar } from "@/components/search-bar"
 import { DefinitionCard } from "@/components/definition-card"
-import { Book, AlertCircle } from "lucide-react"
+import { Book, AlertCircle, Sparkles, TrendingUp } from "lucide-react"
 import { searchWord } from "@/lib/dictionary-api"
 import type { SearchResult } from "@/types/dictionary"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function DictionaryApp() {
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null)
@@ -35,19 +36,22 @@ export default function DictionaryApp() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen gradient-bg">
       <div className="flex-1">
-        {/* Header */}
-        <header className="bg-card border-b border-border px-8 py-6">
+        <header className="bg-card/50 backdrop-blur-sm border-b border-border/50 px-8 py-8">
           <div className="max-w-4xl mx-auto">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="flex items-center gap-2">
-                <Book className="h-8 w-8 text-primary" />
+            <div className="flex items-center gap-4 mb-8">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-xl">
+                  <Book className="h-8 w-8 text-primary" />
+                </div>
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-foreground text-balance">English Dictionary</h1>
-                <p className="text-muted-foreground mt-1">
-                  Search for definitions, pronunciations, and examples of English words
+                <h1 className="text-4xl font-bold text-foreground text-balance">
+                  English <span className="word-highlight">Dictionary</span>
+                </h1>
+                <p className="text-muted-foreground mt-2 text-lg">
+                  Discover meanings, pronunciations, and examples with our comprehensive dictionary
                 </p>
               </div>
             </div>
@@ -60,13 +64,18 @@ export default function DictionaryApp() {
         <main className="px-8 py-8">
           <div className="max-w-4xl mx-auto">
             {searchResult && hasSearched && (
-              <div className="mb-6">
+              <div className="mb-8">
                 {searchResult.found ? (
-                  <p className="text-muted-foreground">Found definitions for "{searchResult.word}"</p>
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Sparkles className="h-4 w-4 text-primary" />
+                    <p>
+                      Found definitions for <span className="font-semibold text-primary">"{searchResult.word}"</span>
+                    </p>
+                  </div>
                 ) : (
-                  <Alert>
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>
+                  <Alert className="border-destructive/20 bg-destructive/5">
+                    <AlertCircle className="h-4 w-4 text-destructive" />
+                    <AlertDescription className="text-destructive">
                       {searchResult.error || `No results found for "${searchResult.word}"`}
                     </AlertDescription>
                   </Alert>
@@ -75,12 +84,61 @@ export default function DictionaryApp() {
             )}
 
             {!hasSearched && (
-              <div className="text-center py-12">
-                <Book className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                <h2 className="text-xl font-semibold text-foreground mb-2">Welcome to English Dictionary</h2>
-                <p className="text-muted-foreground max-w-md mx-auto text-pretty">
-                  Search for any English word above to get comprehensive definitions, pronunciations, and examples.
-                </p>
+              <div className="text-center py-16">
+                <div className="mb-12">
+                  <div className="p-4 bg-primary/10 rounded-full w-20 h-20 mx-auto mb-6 flex items-center justify-center">
+                    <Book className="h-10 w-10 text-primary" />
+                  </div>
+                  <h2 className="text-3xl font-bold text-foreground mb-4">Welcome to English Dictionary</h2>
+                  <p className="text-muted-foreground max-w-2xl mx-auto text-lg leading-relaxed">
+                    Search for any English word above to get comprehensive definitions, pronunciations, and examples.
+                    Powered by our advanced Python backend for fast and accurate results.
+                  </p>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+                  <Card className="border-primary/20 hover:border-primary/40 transition-colors">
+                    <CardHeader className="pb-3">
+                      <div className="p-2 bg-primary/10 rounded-lg w-fit mx-auto">
+                        <Sparkles className="h-6 w-6 text-primary" />
+                      </div>
+                      <CardTitle className="text-lg">Comprehensive Definitions</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground text-sm">
+                        Get detailed meanings, parts of speech, and usage examples for any word.
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-primary/20 hover:border-primary/40 transition-colors">
+                    <CardHeader className="pb-3">
+                      <div className="p-2 bg-primary/10 rounded-lg w-fit mx-auto">
+                        <TrendingUp className="h-6 w-6 text-primary" />
+                      </div>
+                      <CardTitle className="text-lg">Smart Suggestions</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground text-sm">
+                        Get word suggestions as you type to help you find what you're looking for.
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-primary/20 hover:border-primary/40 transition-colors">
+                    <CardHeader className="pb-3">
+                      <div className="p-2 bg-primary/10 rounded-lg w-fit mx-auto">
+                        <Book className="h-6 w-6 text-primary" />
+                      </div>
+                      <CardTitle className="text-lg">Audio Pronunciation</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground text-sm">
+                        Listen to correct pronunciations with phonetic transcriptions.
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
             )}
 
